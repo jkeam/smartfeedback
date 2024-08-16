@@ -2,6 +2,7 @@ FROM registry.access.redhat.com/ubi9/python-311@sha256:8a067206cbdbf73a39261f11c
 
 # python settings
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Add application sources with correct permissions for OpenShift
 USER 0
