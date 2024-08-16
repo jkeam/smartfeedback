@@ -27,7 +27,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env('DEBUG')
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', '*')]
 CSRF_TRUSTED_ORIGINS = [f"https://*.{os.environ.get('CSRF_TRUSTED_ORIGINS', '*')}", f"http://*.{os.environ.get('CSRF_TRUSTED_ORIGINS', '*')}"]
