@@ -136,6 +136,8 @@ spec:
         value: |
           cat openshift/pipeline/deploy.yaml | sed "s/IMAGE/image-registry.openshift-image-registry.svc:5000\/$(context.pipelineRun.namespace)\/$(params.APP_NAME)@$(tasks.build-image.results.IMAGE_DIGEST)/" > deployment.yaml
           oc apply --filename ./deployment.yaml -n $(params.DEV_PROJECT)
+          sleep 10
+          oc exec $(oc get pod -l app=feedback -o name) -- python ./manage.py migrate
   finally:
     - name: destroy-db
       taskRef:

@@ -18,8 +18,7 @@ Standup database.
 ```shell
 oc new-app --name=feedback-db \
   --image=registry.redhat.io/rhel9/postgresql-15:1-74 \
-  --env POSTGRESQL_ADMIN_PASSWORD=$POSTGRESQL_ADMIN_PASSWORD \
-  --env POSTGRESQL_DATABASE=adminpassword \
+  --env POSTGRESQL_ADMIN_PASSWORD=adminpassword\
   --env POSTGRESQL_PASSWORD=feedbackpassword \
   --env POSTGRESQL_USER=feedbackuser \
   --env POSTGRESQL_DATABASE=feedback \
