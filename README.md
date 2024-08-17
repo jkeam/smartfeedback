@@ -2,6 +2,24 @@
 
 Smart Feedback App
 
+## OpenShift
+
+### Pipeline
+
+#### Setup
+
+```shell
+oc new-project feedback
+oc apply -f ./openshift/pipeline/tasks.yaml
+oc apply -f ./openshift/pipeline/pipeline.yaml
+```
+
+#### Triggering
+
+```shell
+oc create -f ./openshift/pipeline/pipelinerun.yaml
+```
+
 ## Local
 
 ### Prerequisite
