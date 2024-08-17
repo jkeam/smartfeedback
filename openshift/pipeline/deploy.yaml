@@ -40,7 +40,7 @@ spec:
           - name: ALLOWED_HOSTS
             value: "*"
           - name: CSRF_TRUSTED_ORIGINS
-            value: "feedback-feedback.apps.lab.lan"
+            value: "feedback-feedback.apps.lab.lan,feedback-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
           - name: VLLM_BASE_URL

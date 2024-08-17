@@ -45,7 +45,7 @@ oc apply -f ./openshift/pipeline/pipeline.yaml --namespace feedback
 #### Triggering
 
 ```shell
-oc create -f ./openshift/pipeline/pipelinerun.yaml
+oc create -f ./openshift/pipeline/pipelinerun.yaml --namespace feedback
 ```
 
 ## Local
