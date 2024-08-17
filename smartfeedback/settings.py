@@ -36,6 +36,7 @@ CSRF_TRUSTED_ORIGINS = [f"https://*.{os.environ.get('CSRF_TRUSTED_ORIGINS', '*')
 # Application definition
 
 INSTALLED_APPS = [
+    'feedback.apps.FeedbackConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

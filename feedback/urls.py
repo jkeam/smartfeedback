@@ -1,5 +1,5 @@
 from django.urls import path
-app_name = 'todos'
+app_name = 'feedback'
 
 from . import views
 urlpatterns = [
