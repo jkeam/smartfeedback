@@ -44,4 +44,22 @@
   </tbody>
 </table>
 
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" class="pagination-link">&laquo; first</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">previous</a>
+    {% endif %}
+
+    <a href="#" class="current pagination-link is-current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </a>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="pagination-next">next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
+
 {% endblock %}
