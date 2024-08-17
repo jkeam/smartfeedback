@@ -305,6 +305,10 @@ spec:
     type: string
     description: Allowed hosts
     default: "*"
+  - name: REDIS_URL
+    type: string
+    description: Redis URL
+    default: "redis://localhost:6379"
   workspaces:
   - name: source
   steps:
@@ -336,6 +340,8 @@ spec:
       value: "$(params.DB_PORT)"
     - name: ALLOWED_HOSTS
       value: "$(params.ALLOWED_HOSTS)"
+    - name: REDIS_URL
+      value: "$(params.REDIS_URL)"
 
 ---
 
@@ -412,6 +418,7 @@ spec:
     script: |
       #!/usr/bin/env bash
 
+      oc new-app --name=$(params.DB_NAME)-redis --image=registry.redhat.io/rhel9/redis-7:1-27 --labels 'app=$(params.DB_NAME)-redis'
       oc new-app --name=$(params.DB_NAME) --image=registry.redhat.io/rhel9/postgresql-15:1-74 --env POSTGRESQL_ADMIN_PASSWORD=$POSTGRESQL_ADMIN_PASSWORD --env POSTGRESQL_DATABASE=$POSTGRESQL_DATABASE --env POSTGRESQL_PASSWORD=$POSTGRESQL_PASSWORD --env POSTGRESQL_USER=$POSTGRESQL_USER --env POSTGRESQL_DATABASE=feedback --labels 'app=$(params.DB_NAME)'
       echo -n "$DB_NAME" > $(results.deployment.path)
     env:
@@ -459,3 +466,7 @@ spec:
       oc delete deployment -l app="$(params.DB_NAME)"
       oc delete service -l app="$(params.DB_NAME)"
       oc delete imagestream -l app="$(params.DB_NAME)"
+
+      oc delete deployment -l app="$(params.DB_NAME)-redis"
+      oc delete service -l app="$(params.DB_NAME)-redis"
+      oc delete imagestream -l app="$(params.DB_NAME)-redis"
