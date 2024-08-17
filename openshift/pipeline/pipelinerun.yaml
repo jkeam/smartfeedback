@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: feedback-pipelinerun-
+spec:
+  serviceAccountName: 'pipeline'
+  pipelineRef:
+    name: feedback-pipeline
+  params:
+    - name: APP_SOURCE_GIT
+      value: https://github.com/jkeam/smartfeedback
+    - name: DEV_PROJECT
+      value: feedback
+  workspaces:
+  - name: workspace
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem

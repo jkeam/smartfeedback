@@ -1,0 +1,146 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: feedback-pipeline
+spec:
+  params:
+    - name: APP_SOURCE_GIT
+      type: string
+      description: The application git repository
+    - name: APP_SOURCE_REVISION
+      type: string
+      description: The application git branch or sha hash
+      default: main
+    - name: APP_NAME
+      type: string
+      description: The application name
+      default: feedback
+    - name: DOCKERFILE
+      type: string
+      description: Dockerfile location
+      default: Containerfile
+    - name: DEV_PROJECT
+      type: string
+      description: Project name for dev
+    - name: DEBUG
+      type: string
+      description: Debug flag
+      default: "True"
+    - name: DJANGO_SECRET_KEY
+      type: string
+      description: Secret key
+      default: "django-insecure-#zd522dfd9)ce1j4*-lj%t@r$syze#@+$(9j89td=@+t8d)!k+"
+    - name: DB_NAME
+      type: string
+      description: Database name
+      default: "feedback"
+    - name: DB_USER
+      type: string
+      description: Database username
+      default: "postgres"
+    - name: DB_PASSWORD
+      type: string
+      description: Database password
+      default: "adminpassword"
+    - name: DB_HOST
+      type: string
+      description: Database host
+      default: "$(context.pipelineRun.name).$(context.pipelineRun.namespace).svc.cluster.local"
+    - name: DB_PORT
+      type: string
+      description: Database port
+      default: "5432"
+    - name: ALLOWED_HOSTS
+      type: string
+      description: Allowed hosts
+      default: "*"
+  results:
+    - name: APP_IMAGE_DIGEST
+      description: The image digest built in the pipeline
+      value: $(tasks.build-image.results.IMAGE_DIGEST)
+  workspaces:
+  - name: workspace
+  tasks:
+  - name: source-clone
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: workspace
+    params:
+    - name: url
+      value: $(params.APP_SOURCE_GIT)
+    - name: revision
+      value: $(params.APP_SOURCE_REVISION)
+  - name: run-db
+    taskRef:
+      name: run-db
+      kind: Task
+    runAfter:
+      - source-clone
+    params:
+      - name: DB_NAME
+        value: $(context.pipelineRun.name)
+  - name: run-tests
+    taskRef:
+      name: django-test
+      kind: Task
+    runAfter:
+      - run-db
+    workspaces:
+    - name: source
+      workspace: workspace
+    params:
+    - name: DEBUG
+      value: "$(params.DEBUG)"
+    - name: DJANGO_SECRET_KEY
+      value: "$(params.DJANGO_SECRET_KEY)"
+    - name: DB_NAME
+      value: "$(params.DB_NAME)"
+    - name: DB_USER
+      value: "$(params.DB_USER)"
+    - name: DB_PASSWORD
+      value: "$(params.DB_PASSWORD)"
+    - name: DB_HOST
+      value: "$(params.DB_HOST)"
+    - name: DB_PORT
+      value: "$(params.DB_PORT)"
+    - name: ALLOWED_HOSTS
+      value: "$(params.ALLOWED_HOSTS)"
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    runAfter:
+      - run-tests
+    params:
+    - name: IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.APP_NAME)
+    - name: DOCKERFILE
+      value: "$(params.DOCKERFILE)"
+    workspaces:
+    - name: source
+      workspace: workspace
+  - name: deploy-dev
+    runAfter:
+      - build-image
+    taskRef:
+      name: openshift-client
+      kind: ClusterTask
+    workspaces:
+      - name: manifest-dir
+        workspace: workspace
+    params:
+      - name: SCRIPT
+        value: |
+          cat pipeline/deploy.yaml | sed "s/IMAGE/image-registry.openshift-image-registry.svc:5000\/$(context.pipelineRun.namespace)\/$(params.APP_NAME)@$(tasks.build-image.results.IMAGE_DIGEST)/" > deployment.yaml
+          oc apply --filename ./deployment.yaml -n $(params.DEV_PROJECT)
+  finally:
+    - name: destroy-db
+      taskRef:
+        name: destroy-db
+        kind: Task
+      params:
+        - name: DB_NAME
+          value: $(context.pipelineRun.name)
