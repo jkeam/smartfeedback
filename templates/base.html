@@ -19,9 +19,7 @@
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     </head>
     <body>
-        {% if user.is_authenticated %}
-          {% include 'navbar.html' %}
-        {% endif %}
+        {% include 'navbar.html' %}
         <div class="container is-fluid">
           <div class="section">
             {% block content %}

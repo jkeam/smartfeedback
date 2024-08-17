@@ -27,11 +27,15 @@ class FeedbackUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_success_url(self):
       return reverse('feedback:feedback-detail', kwargs={"pk": self.object.pk})
 
-class FeedbackCreateView(LoginRequiredMixin, CreateView):
+class FeedbackCreateView(SuccessMessageMixin, CreateView):
     model = Feedback
     form_class = FeedbackForm
+    success_message = 'Thanks for the feedback!'
     def get_success_url(self):
-      return reverse('feedback:feedback-detail', kwargs={"pk": self.object.pk})
+        if not self.request.user.is_authenticated:
+            return "/"
+        else:
+            return reverse('feedback:feedback-detail', kwargs={"pk": self.object.pk})
 
 class FeedbackDeleteView(DeleteView):
     model = Feedback
