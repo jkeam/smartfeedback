@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env('DEBUG')
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS', '*')]
-CSRF_TRUSTED_ORIGINS = list(map(lambda x: "https://*.{os.environ.get('CSRF_TRUSTED_ORIGINS', '*')}".strip(), os.environ.get('CSRF_TRUSTED_ORIGINS', '*').split(',')))
+CSRF_TRUSTED_ORIGINS = list(map(lambda x: f"https://*.{x.strip()}", os.environ.get('CSRF_TRUSTED_ORIGINS', '*').split(',')))
 
 # Application definition
 
