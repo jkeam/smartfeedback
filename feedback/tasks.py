@@ -33,7 +33,7 @@ def find_sentiment(pk, body):
     messages = [
         (
             "system",
-            "You are a helpful assistant that can find sentiment. Analyze the sentiment of the user sentence.",
+            "Is the predominant sentiment of the customer in the following text positive, negative, or neutral? Respond in one word: Positive, Negative, or Neutral.",
         ),
         ("human", body),
     ]
