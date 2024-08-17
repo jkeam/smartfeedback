@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-311@sha256:8a067206cbdbf73a39261f11c028a6fa55369d44b6c08f3d5f4d5194bfad69a5
+FROM registry.access.redhat.com/ubi9/python-312:1-20.1722518948
 
 # python settings
 ENV PYTHONDONTWRITEBYTECODE 1
