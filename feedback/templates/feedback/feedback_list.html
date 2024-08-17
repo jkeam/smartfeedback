@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="title">
+  Feedback
+</h1>
+
+<h2 class="subtitle">
+  Listing
+</h2>
+
+<div class="field is-grouped">
+  <p class="control">
+    <a href="{% url 'feedback:feedback-new' %}" class="button is-secondary">
+      New
+    </a>
+  </p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-striped">
+  <thead>
+    <tr>
+      <th>
+          Comment
+      </th>
+      <th>
+          Created At
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in object_list %}
+      <tr>
+        <td class="">
+          <a href="{% url 'feedback:feedback-detail' obj.id %}" class="button is-text">
+            {{ obj.body }}
+          </a>
+        </td>
+        <td class="">
+          {{ obj.created_at }}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

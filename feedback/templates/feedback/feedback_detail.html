@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="title">
+  Feedback
+</h1>
+
+<h2 class="subtitle">
+  Detail
+</h2>
+
+<div class="box">
+  <div class="block">
+    <strong>Comment:</strong>
+    <br />
+    {{ object.body }}
+  </div>
+
+  <div class="block">
+    <strong>Sentiment:</strong>
+    <br />
+    {{ object.sentiment }}
+  </div>
+
+  <div class="block">
+    <strong>Created At:</strong>
+    <br />
+    {{ object.created_at }}
+  </div>
+
+  <div class="block">
+    <strong>Updated At:</strong>
+    <br />
+    {{ object.updated_at }}
+  </div>
+</div>
+
+<br />
+
+<div class="field is-grouped">
+  <p class="control">
+    <a href="{% url 'feedback:feedback-update' object.id %}" class="button is-text">
+      Update
+    </a>
+  </p>
+  <p class="control">
+    <a href="{% url 'feedback:feedback-delete' object.id %}" class="button is-text">
+      Delete
+    </a>
+  </p>
+  <p class="control">
+    <a href="{% url 'feedback:feedback-listing' %}" class="button is-text">
+      View All
+    </a>
+  </p>
+</div>
+
+{% endblock %}

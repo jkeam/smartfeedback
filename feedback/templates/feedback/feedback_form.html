@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="title">
+  Feedback
+</h1>
+
+<h2 class="subtitle">
+  {% if form.instance.id %}
+  Update
+  {% else %}
+  New
+  {% endif %}
+</h2>
+
+<form method="post">
+  {% for field in form %}
+    {% csrf_token %}
+    <div class="field">
+      <div class="control {% if field.name == 'progress' %} select {% endif %}">
+        {{ field }}
+      </div>
+      {% if field.errors %}
+        <small class="error has-text-danger">{{ field.errors|striptags }}</small>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="button is-primary">Save</button>
+</form>
+
+<br />
+
+<div class="field is-grouped">
+  {% if form.instance.pk %}
+  <p class="control">
+    <a href="{% url 'feedback:feedback-detail' object.id %}" class="button is-text">
+      View
+    </a>
+  </p>
+  {% endif %}
+
+  <p class="control">
+    <a href="{% url 'feedback:feedback-listing' %}" class="button is-text">
+      View All
+    </a>
+  </p>
+</div>
+
+{% endblock %}

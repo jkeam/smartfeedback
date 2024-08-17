@@ -5,6 +5,9 @@
 {% block content %}
 {% if user.is_authenticated %}
   <h1 class="title">Welcome {{ user.first_name|default:user.username }}</h1>
+  <p class="pt-4">
+    <a class="button is-text" href="{% url 'feedback:feedback-listing' %}">See all feedback</a>
+  </p>
 {% else %}
   <h1 class="title">Hello</h1>
   <p>

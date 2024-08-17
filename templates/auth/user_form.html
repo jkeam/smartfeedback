@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="title">
+  Update Profile
+</h1>
+
+<form method="post">
+  {% for field in form %}
+    {% csrf_token %}
+    <div class="field">
+      <label class="label" for="{{ field.auto_id }}">{{ field.label }}</label>
+      <div class="control">
+        {{ field }}
+      </div>
+      {% if field.errors %}
+        <small class="error has-text-danger">{{ field.errors|striptags }}</small>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button type="submit" class="button is-primary">Save</button>
+</form>
+
+{% include 'messages.html' with messages=messages %}
+
+<div class="mb-5 mt-5">
+  <a href="{% url 'feedback:profile-password' %}" class="button is-text">
+    Change password
+  </a>
+</div>
+
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="button is-danger">Logout</button>
+</form>
+
+{% endblock %}

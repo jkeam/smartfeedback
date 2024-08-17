@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="title">
+  Feedback
+</h1>
+
+<h2 class="subtitle">
+  Delete
+</h2>
+
+<div class="block">
+    <form method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete? This cannot be undone.</p>
+        <button type="submit" class="button is-primary">Delete</button>
+    </form>
+</div>
+
+<br/>
+
+<div class="field is-grouped">
+  <p class="control">
+    <a href="{% url 'feedback:feedback-detail' object.id %}" class="button is-text">
+      View
+    </a>
+  </p>
+</div>
+
+{% endblock %}
