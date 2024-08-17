@@ -42,7 +42,7 @@ spec:
           - name: CSRF_TRUSTED_ORIGINS
             value: "feedback-feedback.apps.lab.lan"
           - name: REDIS_URL
-            value: "feedback-redis.feedback.svc.cluster.local"
+            value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
           ports:
           - containerPort: 8000
             name: theport
@@ -126,7 +126,7 @@ spec:
           - name: CSRF_TRUSTED_ORIGINS
             value: "feedback-feedback.apps.lab.lan"
           - name: REDIS_URL
-            value: "feedback-redis.feedback.svc.cluster.local"
+            value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
           command: ["/bin/sh"]
           args: ["-c", "celery -A smartfeedback worker -l INFO"]
       restartPolicy: Always
