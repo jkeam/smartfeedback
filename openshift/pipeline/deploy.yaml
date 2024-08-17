@@ -82,6 +82,57 @@ spec:
 
 ---
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedback-celery
+  labels:
+    app: feedback-celery
+spec:
+  selector:
+    matchLabels:
+      app: feedback-celery
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: feedback-celery
+    spec:
+      containers:
+        - name: feedback
+          image: IMAGE
+          env:
+          - name: PYTHONDONTWRITEBYTECODE
+            value: "1"
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          - name: DEBUG
+            value: "True"
+          - name: DJANGO_SECRET_KEY
+            value: "django-insecure-#zd522dfd9)ce1j4*-lj%t@r$syze#@+$(9j89td=@+t8d)!k+"
+          - name: DB_NAME
+            value: "feedback"
+          - name: DB_USER
+            value: "postgres"
+          - name: DB_PASSWORD
+            value: "adminpassword"
+          - name: DB_HOST
+            value: "feedback-db.feedback.svc.cluster.local"
+          - name: DB_PORT
+            value: "5432"
+          - name: ALLOWED_HOSTS
+            value: "*"
+          - name: CSRF_TRUSTED_ORIGINS
+            value: "feedback-feedback.apps.lab.lan"
+          - name: REDIS_URL
+            value: "feedback-redis.feedback.svc.cluster.local"
+          command: ["/bin/sh"]
+          args: ["-c", "python -m celery -A smartfeedback worker"]
+      restartPolicy: Always
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
