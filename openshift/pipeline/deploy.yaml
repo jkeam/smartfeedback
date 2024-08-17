@@ -38,7 +38,7 @@ spec:
           - name: DB_PORT
             value: "5432"
           - name: ALLOWED_HOSTS
-            value: "feedback-feedback.apps.lab.lan"
+            value: "*"
           - name: CSRF_TRUSTED_ORIGINS
             value: "feedback-feedback.apps.lab.lan"
           ports:
