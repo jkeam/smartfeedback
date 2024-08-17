@@ -43,6 +43,10 @@ spec:
             value: "feedback-feedback.apps.lab.lan"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
+          - name: VLLM_BASE_URL
+            value: "http://llm.ic-shared-llm.svc.cluster.local:8000"
+          - name: VLLM_MODEL_NAME
+            value: "mistralai/Mistral-7B-Instruct-v0.2"
           ports:
           - containerPort: 8000
             name: theport
@@ -127,6 +131,10 @@ spec:
             value: "feedback-feedback.apps.lab.lan"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
+          - name: VLLM_BASE_URL
+            value: "http://llm.ic-shared-llm.svc.cluster.local:8000"
+          - name: VLLM_MODEL_NAME
+            value: "mistralai/Mistral-7B-Instruct-v0.2"
           command: ["/bin/sh"]
           args: ["-c", "celery -A smartfeedback worker -l INFO"]
       restartPolicy: Always
