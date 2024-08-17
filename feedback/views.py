@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import UserForm, PasswordForm, FeedbackForm
 from .models import Feedback
+from .tasks import find_sentiment
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
@@ -36,6 +37,11 @@ class FeedbackCreateView(SuccessMessageMixin, CreateView):
             return "/"
         else:
             return reverse('feedback:feedback-detail', kwargs={"pk": self.object.pk})
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        obj = form.instance
+        find_sentiment.delay_on_commit(obj.pk, obj.body)
+        return response
 
 class FeedbackDeleteView(DeleteView):
     model = Feedback

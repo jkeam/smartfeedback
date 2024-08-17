@@ -41,6 +41,8 @@ spec:
             value: "*"
           - name: CSRF_TRUSTED_ORIGINS
             value: "feedback-feedback.apps.lab.lan"
+          - name: REDIS_URL
+            value: "feedback-redis.feedback.svc.cluster.local"
           ports:
           - containerPort: 8000
             name: theport

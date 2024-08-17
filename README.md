@@ -26,6 +26,15 @@ oc new-app --name=feedback-db \
   --namespace feedback
 ```
 
+Standup redis.
+
+```shell
+oc new-app --name=feedback-redis \
+  --image=registry.redhat.io/rhel9/redis-7:1-27 \
+  --labels 'app=feedback-redis' \
+  --namespace feedback
+```
+
 Create pipeline.
 
 ```shell
