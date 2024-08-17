@@ -34,7 +34,7 @@ spec:
           - name: DB_PASSWORD
             value: "adminpassword"
           - name: DB_HOST
-            value: "db"
+            value: "feedback-db.feedback.svc.cluster.local"
           - name: DB_PORT
             value: "5432"
           - name: ALLOWED_HOSTS
