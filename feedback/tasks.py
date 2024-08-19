@@ -42,7 +42,6 @@ def find_sentiment(pk, body):
     template = PromptTemplate(input_variables=['text'], template=template)
 
     user_input = body.strip()
-    print(llm.invoke(template.format(text=user_input)))
     response = llm.invoke(template.format(text=user_input)).strip()
     logger.info(f"{user_input}: {response}")
 
