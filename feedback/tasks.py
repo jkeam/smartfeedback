@@ -5,6 +5,9 @@ from langchain_openai import OpenAI
 from langchain_community.llms import VLLMOpenAI
 from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 openapi_key = getenv('OPENAI_API_KEY', None)
 vllm_base_url = getenv('VLLM_BASE_URL', None)
@@ -35,18 +38,14 @@ else:
 def find_sentiment(pk, body):
     if llm is None:
         return
+    template = """Is the predominant sentiment of the user in the following text positive, negative, or neutral?
+Respond in one word: Positive, Negative, or Neutral. Text: {text}"""
+    template = PromptTemplate(input_variables=['text'], template=template)
+
+    user_input = body.strip()
+    response = llm.predict(text=template.format(text=user_input)).strip()
+    logger.info(f"{user_input}: {response}")
 
     feedback = Feedback.objects.get(pk=pk)
-    template = """<s>[INST] <<SYS>>
-Is the predominant sentiment of the customer in the following text positive, negative, or neutral?
-Respond in one word: Positive, Negative, or Neutral.
-
-Text:
-<</SYS>>
-[/INST]
-"""
-    llm_chain = LLMChain(llm=llm, prompt=PromptTemplate.from_template(template))
-    response = llm_chain.run(body)
-    print(response)
     feedback.sentiment = response
     feedback.save()
