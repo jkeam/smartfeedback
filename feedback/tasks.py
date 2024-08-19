@@ -38,11 +38,11 @@ else:
 def find_sentiment(pk, body):
     if llm is None:
         return
-    template = """Is the predominant sentiment of the user in the following text positive, negative, or neutral?
-Respond in one word: Positive, Negative, or Neutral. Text: {text}"""
+    template = """<s>[INST] What is the sentiment of the following text? Respond in one word. [/INST] Positive, Negative, or Neutral</s>[INST] {text} [/INST]"""
     template = PromptTemplate(input_variables=['text'], template=template)
 
     user_input = body.strip()
+    print(llm.invoke(template.format(text=user_input)))
     response = llm.invoke(template.format(text=user_input)).strip()
     logger.info(f"{user_input}: {response}")
 
