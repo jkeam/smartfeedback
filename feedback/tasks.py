@@ -12,7 +12,7 @@ vllm_model_name = getenv('VLLM_MODEL_NAME', None)
 if openapi_key is not None:
     llm = OpenAI(
         model="gpt-3.5-turbo-instruct",
-        temperature=0,
+        temperature=0.01,
         timeout=None,
         max_retries=2,
     )
@@ -21,10 +21,9 @@ elif vllm_base_url is not None and vllm_model_name is not None:
         openai_api_key="EMPTY",
         openai_api_base=f"{vllm_base_url}/v1",
         model_name=vllm_model_name,
-        model_kwargs={"stop": ["."]},
         max_tokens=512,
         top_p=0.95,
-        temperature=0,
+        temperature=0.01,
         presence_penalty=1.03,
         streaming=False,
         verbose=False,
