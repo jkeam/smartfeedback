@@ -43,7 +43,7 @@ Respond in one word: Positive, Negative, or Neutral. Text: {text}"""
     template = PromptTemplate(input_variables=['text'], template=template)
 
     user_input = body.strip()
-    response = llm.predict(text=template.format(text=user_input)).strip()
+    response = llm.invoke(template.format(text=user_input)).strip()
     logger.info(f"{user_input}: {response}")
 
     feedback = Feedback.objects.get(pk=pk)
