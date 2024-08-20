@@ -21,10 +21,13 @@
   <thead>
     <tr>
       <th>
-          Comment
+        Comment
       </th>
       <th>
-          Created At (UTC)
+        Sentiment
+      </th>
+      <th>
+        Created At (UTC)
       </th>
     </tr>
   </thead>
@@ -35,6 +38,15 @@
           <a href="{% url 'feedback:feedback-detail' obj.id %}" class="button is-text">
             {{ obj.body }}
           </a>
+        </td>
+        <td class="">
+          {% if obj.sentiment == 'Positive' %}
+            <i class="fas fa-thumbs-up fa-lg" style="color: green;"></i>
+          {% elif obj.sentiment == 'Negative' %}
+            <i class="fas fa-thumbs-down fa-lg is-danger" style="color: red;"></i>
+          {% else %}
+            {{ obj.sentiment }}
+          {% endif %}
         </td>
         <td class="">
           {{ obj.created_at }}

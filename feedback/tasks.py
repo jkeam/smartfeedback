@@ -45,7 +45,7 @@ else:
 
 def update_feedback(pk, sentiment):
     feedback = Feedback.objects.get(pk=pk)
-    feedback.sentiment = sentiment
+    feedback.sentiment = sentiment.strip()
     feedback.save()
     return feedback
 
