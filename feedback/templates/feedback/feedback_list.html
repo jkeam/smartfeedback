@@ -44,6 +44,7 @@
   </tbody>
 </table>
 
+{% if page_obj.paginator.num_pages > 1 %}
 <nav class="pagination" role="navigation" aria-label="pagination">
   <span class="step-links">
     {% if page_obj.has_previous %}
@@ -61,5 +62,6 @@
     {% endif %}
   </span>
 </div>
+{% endif %}
 
 {% endblock %}
