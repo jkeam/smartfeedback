@@ -31,7 +31,11 @@ class FeedbackUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class FeedbackCreateView(SuccessMessageMixin, CreateView):
     model = Feedback
     form_class = FeedbackForm
-    success_message = 'Thanks for the feedback!'
+    def get_success_message(self, cleaned_data):
+        if not self.request.user.is_authenticated:
+            return 'Thanks for the feedback!'
+        else:
+            return 'Saved'
     def get_success_url(self):
         if not self.request.user.is_authenticated:
             return "/"
