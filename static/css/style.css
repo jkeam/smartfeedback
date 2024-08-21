@@ -1,3 +1,6 @@
+.white {
+  color: white !important;
+}
 .center-form {
   width: 50vw;
   margin: auto;

@@ -1,7 +1,7 @@
 {% load static %}
 <header class="pf-v5-c-masthead" id="page-demo-basic-masthead">
   <div class="pf-v5-c-masthead__main">
-      <a class="pf-v5-c-masthead__brand" href="{% url 'feedback:root' %}" style="text-decoration: none;">
+      <a class="pf-v5-c-masthead__brand white" href="{% url 'feedback:root' %}" style="text-decoration: none;">
         <i class="fas fa-comment fa-2x" aria-hidden="true"></i>
         <div style="font-family: RedHatDisplay; font-weight: 400; font-size: 1.5rem; line-height: 1.3; padding-left: 0.5rem;">
           Smart Feedback
@@ -26,14 +26,14 @@
                             <img class="pf-v5-c-avatar" alt="Avatar image" src="{% static 'images/img_avatar-light.svg' %}" />
                         </span>
                         <span class="pf-v5-c-menu-toggle__text">
-                          <a class="" href="{% url 'feedback:profile-detail' %}">
+                          <a class="white" href="{% url 'feedback:profile-detail' %}">
                             {{ user.get_username }}
                           </a>
                         </span>
                     </button>
                     {% else %}
                     <button class="pf-v5-c-menu-toggle pf-m-full-height" type="button" aria-expanded="false">
-                      <a class="" href="{% url 'login' %}">
+                      <a class="white" href="{% url 'login' %}">
                         Login
                       </a>
                     </button>
