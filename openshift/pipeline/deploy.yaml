@@ -43,9 +43,11 @@ spec:
             value: "feedback-feedback.apps.lab.lan,feedback-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
-          - name: VLLM_BASE_URL
+          - name: MODEL_API_URL
             value: "https://granite-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
-          - name: VLLM_MODEL_NAME
+          - name: MODEL_FAMILY
+            value: "granite"
+          - name: MODEL_NAME
             value: "granite"
           ports:
           - containerPort: 8000
@@ -131,9 +133,11 @@ spec:
             value: "feedback-feedback.apps.lab.lan"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
-          - name: VLLM_BASE_URL
+          - name: MODEL_API_URL
             value: "https://granite-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
-          - name: VLLM_MODEL_NAME
+          - name: MODEL_FAMILY
+            value: "granite"
+          - name: MODEL_NAME
             value: "granite"
           command: ["/bin/sh"]
           args: ["-c", "celery -A smartfeedback worker -l INFO"]
