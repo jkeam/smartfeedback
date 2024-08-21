@@ -1,47 +1,63 @@
 from celery import shared_task
 from .models import Feedback
-from os import getenv
+from os import getenv, path
 from langchain_openai import OpenAI
 from langchain_community.llms import VLLMOpenAI
 from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
 from logging import getLogger
+from pathlib import Path
+from django.conf import settings
 
 logger = getLogger(__name__)
 
-openapi_key = getenv('OPENAI_API_KEY', None)
-vllm_base_url = getenv('VLLM_BASE_URL', None)
-vllm_model_name = getenv('VLLM_MODEL_NAME', None)
-if openapi_key is not None:
-    llm = OpenAI(
-        model='gpt-3.5-turbo-instruct',
-        temperature=0.01,
-        timeout=None,
-        max_retries=2,
-    )
-elif vllm_base_url is not None and vllm_model_name is not None:
-    # mistral
-    # max_tokens=512,
-    # top_p=0.95,
-    # presence_penalty=1.03,
+MODEL_API_KEY = getenv('MODEL_API_KEY', None)
+MODEL_API_URL = getenv('MODEL_API_URL', None)
+MODEL_NAME = getenv('MODEL_NAME', None)
+MODEL_FAMILY = getenv('MODEL_FAMILY', None)
 
-    # granite-7b-lab
-    # max_tokens=900,
-    # top_p=0.85,
-    # presence_penalty=1.05,
-    llm = VLLMOpenAI(
-        openai_api_key="EMPTY",
-        openai_api_base=f"{vllm_base_url}/v1",
-        model_name=vllm_model_name,
-        streaming=False,
-        verbose=False,
-        temperature=0.01,
-        max_tokens=900,
-        top_p=0.85,
-        presence_penalty=1.05,
-    )
-else:
-    llm = None
+# sets llm and template
+match(MODEL_FAMILY):
+    case 'openai':
+        template = Path(path.join(settings.BASE_DIR, 'prompts', 'openai.txt')).read_text(encoding='utf-8')
+        llm = OpenAI(
+            api_key=MODEL_API_KEY,
+            model=MODEL_NAME,
+            temperature=0.01,
+            timeout=None,
+            max_retries=2,
+        )
+    case 'mistral':
+        # https://www.promptingguide.ai/models/mistral-7b
+        template = Path(path.join(settings.BASE_DIR, 'prompts', 'mistral.txt')).read_text(encoding='utf-8')
+        llm = VLLMOpenAI(
+            openai_api_key="EMPTY",
+            openai_api_base=f"{MODEL_API_URL}/v1",
+            model_name=MODEL_NAME,
+            streaming=False,
+            verbose=False,
+            temperature=0.01,
+            max_tokens=900,
+            top_p=0.85,
+            presence_penalty=1.05,
+        )
+    case 'granite':
+        # https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-ibm-lab.html?context=wx&audience=wdp
+        template = Path(path.join(settings.BASE_DIR, 'prompts', 'granite.txt')).read_text(encoding='utf-8')
+        llm = VLLMOpenAI(
+            openai_api_key="EMPTY",
+            openai_api_base=f"{MODEL_API_URL}/v1",
+            model_name=MODEL_NAME,
+            streaming=False,
+            verbose=False,
+            temperature=0.01,
+            max_tokens=512,
+            top_p=0.95,
+            presence_penalty=1.03,
+        )
+    case _:
+        template = None
+        llm = None
 
 def update_feedback(pk, sentiment):
     feedback = Feedback.objects.get(pk=pk)
@@ -51,45 +67,10 @@ def update_feedback(pk, sentiment):
 
 @shared_task
 def find_sentiment(pk, body):
-    if llm is None:
+    if llm is None or template is None:
         return
-    user_input = body.strip()
-
-    # mistral or openai
-    # https://www.promptingguide.ai/models/mistral-7b
-    # template = """<s>[INST] What is the sentiment of the following text? Respond in one word. [/INST] Positive or Negative</s>[INST] {text} [/INST]"""
-
-    # granite
-    # https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-ibm-lab.html?context=wx&audience=wdp
-    template = """<|system|>
-You are an AI language model developed by IBM Research. You are a cautious assistant. You carefully follow instructions. You are helpful and harmless and you follow ethical guidelines and promote positive behavior.
-<|user|>
-For each feedback, specify whether the content is Positive or Negative. Your response should only include the answer. Do not provide any further explanation.
-Here are some examples, complete the last one:
-Feedback:
-Carol, the service rep was so helpful. She answered all of my questions and explained things beautifully.
-Class:
-Positive
-
-Feedback:
-The service representative did not listen to a word I said. It was a waste of my time.
-Class:
-Negative
-
-Feedback:
-{text}
-Class:
-<|assistant|>
-"""
-    template = PromptTemplate(input_variables=['text'], template=template)
-
-    # mistral and openai
-    # response = llm.invoke(template.format(text=user_input)).strip()
-    # logger.info(f"{user_input}: {response}")
-    # update_feedback(pk, response)
-
-    # granite
-    response = llm.invoke(template.format(text=user_input))
-    bot_response = response.split('\n')
+    prompt_template = PromptTemplate(input_variables=['text'], template=template)
+    bot_response = llm.invoke(prompt_template.format(text=body.strip())).split('\n')
     if len(bot_response) > 0:
+        logger.debug(f"{body.strip()}: {bot_response[0]}")
         update_feedback(pk, bot_response[0])

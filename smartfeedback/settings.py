@@ -153,7 +153,7 @@ LOGGING = {
         },
         'feedback': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
    },

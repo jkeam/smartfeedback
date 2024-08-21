@@ -21,7 +21,13 @@
   <div class="block">
     <strong>Sentiment:</strong>
     <br />
-    {{ object.sentiment }}
+    {% if object.sentiment == 'Positive' %}
+      <i class="fas fa-thumbs-up fa-lg" style="color: green;"></i>
+    {% elif object.sentiment == 'Negative' %}
+      <i class="fas fa-thumbs-down fa-lg is-danger" style="color: red;"></i>
+    {% else %}
+      {{ object.sentiment }}
+    {% endif %}
   </div>
 
   <div class="block">

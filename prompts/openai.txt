@@ -1,0 +1,16 @@
+For each feedback, specify whether the content is Positive or Negative. Your response should only include the answer. Do not provide any further explanation.
+
+Here are some examples, complete the last one:
+Feedback:
+Carol, the service rep was so helpful. She answered all of my questions and explained things beautifully.
+Class:
+Positive
+
+Feedback:
+The service representative did not listen to a word I said. It was a waste of my time.
+Class:
+Negative
+
+Feedback:
+{text}
+Class:

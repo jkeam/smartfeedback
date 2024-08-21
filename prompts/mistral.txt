@@ -1,0 +1,1 @@
+<s>[INST] What is the sentiment of the following text? Respond in one word. [/INST] Positive or Negative</s>[INST] {text} [/INST]
