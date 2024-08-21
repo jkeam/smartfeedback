@@ -3,14 +3,16 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-  <h1 class="title">Welcome {{ user.first_name|default:user.username }}</h1>
-  <p class="pt-4">
-    <a class="button is-text" href="{% url 'feedback:feedback-listing' %}">See all feedback</a>
-  </p>
-{% else %}
-  <h1 class="title">Hello</h1>
-  {% include 'messages.html' with messages=messages %}
-  <a class="button is-text" href="{% url 'feedback:feedback-new' %}">Leave feedback</a>
-{% endif %}
+<section class="pf-v5-c-page__main-section pf-m-light">
+  {% if user.is_authenticated %}
+    <h1 class="title">Welcome {{ user.first_name|default:user.username }}</h1>
+    <p class="pt-4">
+      <a class="button is-text" href="{% url 'feedback:feedback-listing' %}">See all feedback</a>
+    </p>
+  {% else %}
+    <h1 class="title">Hello</h1>
+    {% include 'messages.html' with messages=messages %}
+    <a class="button is-text" href="{% url 'feedback:feedback-new' %}">Leave feedback</a>
+  {% endif %}
+</section>
 {% endblock %}

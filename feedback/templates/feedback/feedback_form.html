@@ -1,49 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 class="title">
-  Feedback
-</h1>
+<section class="pf-v5-c-page__main-section pf-m-light">
+  <h1>Feedback</h1>
+  <p class="subtitle">
+    {% if form.instance.id %}
+    Update
+    {% else %}
+    New
+    {% endif %}
+  </p>
+</section>
 
-<h2 class="subtitle">
-  {% if form.instance.id %}
-  Update
-  {% else %}
-  New
-  {% endif %}
-</h2>
-
-<form method="post">
-  {% for field in form %}
+<section class="pf-v5-c-page__main-section pf-m-fill">
+  <form method="post" class="pf-v5-c-form">
     {% csrf_token %}
-    <div class="field">
-      <div class="control {% if field.name == 'progress' %} select {% endif %}">
-        {{ field }}
+    <section class="pf-v5-c-form__section" role="group">
+      {% for field in form %}
+        <div class="pf-v5-c-form__group">
+          <div class="pf-v5-c-form__group-control">
+            <span class="pf-v5-c-form-control pf-m-required">
+              {{ field }}
+            </span>
+            {% if field.errors %}
+              <small class="error has-text-danger">{{ field.errors|striptags }}</small>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </section>
+    <div class="pf-v5-c-form__group pf-m-action">
+      <div class="pf-v5-c-form__actions">
+        <button class="pf-v5-c-button pf-m-primary" type="submit">Save</button>
       </div>
-      {% if field.errors %}
-        <small class="error has-text-danger">{{ field.errors|striptags }}</small>
-      {% endif %}
     </div>
-  {% endfor %}
-  <button type="submit" class="button is-primary">Save</button>
-</form>
+  </form>
 
-<br />
+  <br />
 
-<div class="field is-grouped">
-  {% if form.instance.pk %}
-  <p class="control">
-    <a href="{% url 'feedback:feedback-detail' object.id %}" class="button is-text">
-      View
-    </a>
-  </p>
-  {% endif %}
+  <div class="field is-grouped">
+    {% if form.instance.pk %}
+    <p class="control">
+      <a href="{% url 'feedback:feedback-detail' object.id %}" class="button is-text">
+        View
+      </a>
+    </p>
+    {% endif %}
 
-  <p class="control">
-    <a href="{% url 'feedback:feedback-listing' %}" class="button is-text">
-      View All
-    </a>
-  </p>
-</div>
+    <p class="control">
+      <a href="{% url 'feedback:feedback-listing' %}" class="button is-text">
+        View All
+      </a>
+    </p>
+  </div>
+</section>
 
 {% endblock %}

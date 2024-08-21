@@ -1,3 +1,12 @@
+.center-form {
+  width: 50vw;
+  margin: auto;
+}
+h1 {
+  font-family: RedHatDisplay, helvetica, arial, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+} 
 .hidden {
   display: none;
 }

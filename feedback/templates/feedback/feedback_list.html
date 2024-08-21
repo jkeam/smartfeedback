@@ -1,79 +1,77 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 class="title">
-  Feedback
-</h1>
+<section class="pf-v5-c-page__main-section pf-m-light">
+  <h1>Feedback</h1>
+  <p>Listing</p>
+</section>
 
-<h2 class="subtitle">
-  Listing
-</h2>
+<section class="pf-v5-c-page__main-section pf-m-fill">
+  <div class="field is-grouped">
+    <p class="control">
+      <a href="{% url 'feedback:feedback-new' %}" class="button is-secondary">
+        New
+      </a>
+    </p>
+  </div>
 
-<div class="field is-grouped">
-  <p class="control">
-    <a href="{% url 'feedback:feedback-new' %}" class="button is-secondary">
-      New
-    </a>
-  </p>
-</div>
-
-<table class="table is-fullwidth is-hoverable is-striped">
-  <thead>
-    <tr>
-      <th>
-        Comment
-      </th>
-      <th>
-        Sentiment
-      </th>
-      <th>
-        Created At (UTC)
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for obj in object_list %}
-      <tr>
-        <td class="">
-          <a href="{% url 'feedback:feedback-detail' obj.id %}" class="button is-text">
-            {{ obj.body }}
-          </a>
-        </td>
-        <td class="">
-          {% if obj.sentiment == 'Positive' %}
-            <i class="fas fa-thumbs-up fa-lg" style="color: green;"></i>
-          {% elif obj.sentiment == 'Negative' %}
-            <i class="fas fa-thumbs-down fa-lg is-danger" style="color: red;"></i>
-          {% else %}
-            {{ obj.sentiment }}
-          {% endif %}
-        </td>
-        <td class="">
-          {{ obj.created_at }}
-        </td>
+  <table
+    class="pf-v5-c-table pf-m-grid-md"
+    role="grid"
+    aria-label="This is a simple table example"
+    id="table-basic"
+  >
+    <caption class="pf-v5-c-table__caption">All Feedback</caption>
+    <thead class="pf-v5-c-table__thead">
+      <tr class="pf-v5-c-table__tr" role="row">
+        <th class="pf-v5-c-table__th" role="columnheader" scope="col">Comment</th>
+        <th class="pf-v5-c-table__th" role="columnheader" scope="col">Sentiment</th>
+        <th class="pf-v5-c-table__th" role="columnheader" scope="col">Created At (UTC)</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
 
-{% if page_obj.paginator.num_pages > 1 %}
-<nav class="pagination" role="navigation" aria-label="pagination">
-  <span class="step-links">
-    {% if page_obj.has_previous %}
-      <a href="?page=1" class="pagination-link">&laquo; first</a>
-      <a href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">previous</a>
-    {% endif %}
+    <tbody class="pf-v5-c-table__tbody" role="rowgroup">
+      {% for obj in object_list %}
+        <tr class="pf-v5-c-table__tr" role="row">
+          <td class="pf-v5-c-table__td" role="cell" data-label="Comment" >
+            <a href="{% url 'feedback:feedback-detail' obj.id %}" class="">
+              {{ obj.body }}
+            </a>
+          </td>
+          <td class="pf-v5-c-table__td" role="cell" data-label="Sentiment">
+            {% if obj.sentiment == 'Positive' %}
+              <i class="fas fa-thumbs-up fa-lg" style="color: green;"></i>
+            {% elif obj.sentiment == 'Negative' %}
+              <i class="fas fa-thumbs-down fa-lg is-danger" style="color: red;"></i>
+            {% else %}
+              {{ obj.sentiment }}
+            {% endif %}
+          </td>
+          <td class="pf-v5-c-table__td" role="cell" data-label="Created At (UTC)">{{ obj.created_at }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-    <a href="#" class="current pagination-link is-current">
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </a>
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="pagination" role="navigation" aria-label="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page=1" class="pagination-link">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}" class="pagination-previous">previous</a>
+        {% endif %}
 
-    {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}" class="pagination-next">next</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
-    {% endif %}
-  </span>
-</div>
-{% endif %}
+        <a href="#" class="current pagination-link is-current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </a>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="pagination-next">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">last &raquo;</a>
+        {% endif %}
+      </span>
+    </nav>
+  {% endif %}
+</section>
 
 {% endblock %}

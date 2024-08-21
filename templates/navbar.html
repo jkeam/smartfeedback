@@ -1,56 +1,46 @@
 {% load static %}
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item is-size-4" href="{% url 'feedback:root' %}">
-      <image src="{% static 'images/logo.png' %}" style="max-height: 3rem; padding-right: 1rem;"/>
-      Smart Feedback
-    </a>
-
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainnav">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="mainnav" class="navbar-menu">
-    <div class="navbar-start">
-    </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          {% if user.is_authenticated %}
-            <a class="button is-primary" href="{% url 'feedback:profile-detail' %}">
-              {{ user.get_username }}
-            </a>
-          {% else %}
-            <a class="button is-primary" href="{% url 'login' %}">
-              Login
-            </a>
-          {% endif %}
+<header class="pf-v5-c-masthead" id="page-demo-basic-masthead">
+  <div class="pf-v5-c-masthead__main">
+      <a class="pf-v5-c-masthead__brand" href="{% url 'feedback:root' %}" style="text-decoration: none;">
+        <i class="fas fa-comment fa-2x" aria-hidden="true"></i>
+        <div style="font-family: RedHatDisplay; font-weight: 400; font-size: 1.5rem; line-height: 1.3; padding-left: 0.5rem;">
+          Smart Feedback
         </div>
-      </div>
+      </a>
+  </div>
+  <div class="pf-v5-c-masthead__content">
+    <div class="pf-v5-c-toolbar pf-m-full-height pf-m-static" id="page-demo-basic-masthead-toolbar">
+        <div class="pf-v5-c-toolbar__content">
+            <div class="pf-v5-c-toolbar__content-section">
+                <div class="pf-v5-c-toolbar__group pf-m-icon-button-group pf-m-align-right pf-m-spacer-none pf-m-spacer-md-on-md">
+                    <div class="pf-v5-c-toolbar__item pf-m-hidden-on-lg">
+                        <button class="pf-v5-c-menu-toggle pf-m-plain" type="button" aria-expanded="false" aria-label="Actions">
+                            <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pf-v5-c-toolbar__item pf-m-hidden pf-m-visible-on-sm">
+                    {% if user.is_authenticated %}
+                    <button class="pf-v5-c-menu-toggle pf-m-full-height" type="button" aria-expanded="false">
+                        <span class="pf-v5-c-menu-toggle__icon">
+                            <img class="pf-v5-c-avatar" alt="Avatar image" src="{% static 'images/img_avatar-light.svg' %}" />
+                        </span>
+                        <span class="pf-v5-c-menu-toggle__text">
+                          <a class="" href="{% url 'feedback:profile-detail' %}">
+                            {{ user.get_username }}
+                          </a>
+                        </span>
+                    </button>
+                    {% else %}
+                    <button class="pf-v5-c-menu-toggle pf-m-full-height" type="button" aria-expanded="false">
+                      <a class="" href="{% url 'login' %}">
+                        Login
+                      </a>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
   </div>
-</nav>
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', () => {
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-    // Add a click event on each of them
-    $navbarBurgers.forEach( el => {
-      el.addEventListener('click', () => {
-
-        // Get the target from the "data-target" attribute
-        const target = el.dataset.target;
-        const $target = document.getElementById(target);
-
-        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-        el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
-      });
-    });
-  });
-</script>
+</header>

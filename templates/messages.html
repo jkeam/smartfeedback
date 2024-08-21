@@ -4,13 +4,12 @@
       <li
         class="
                {% if message.tags %}{{ message.tags }}{% endif %}
-               {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} has-text-danger
-               {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} has-text-success
-               {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} has-text-warning
+               {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} pf-v5-u-danger-color-200
+               {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} pf-v5-u-success-color-200
+               {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %} pf-v5-u-warning-color-200
                {% else %} has-text-info
                {% endif %}
-               "
-      >
+               ">
         {{ message }}
       </li>
     {% endfor %}

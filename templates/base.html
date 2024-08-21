@@ -14,18 +14,35 @@
         <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
         -->
 
+        <!--
         <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/simplex/bulmaswatch.min.css">
+        -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link rel="stylesheet" href="{% static 'css/patternfly.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/patternfly-addons.css' %}" />
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     </head>
+
     <body>
-        {% include 'navbar.html' %}
-        <div class="container is-fluid">
-          <div class="section">
+        <div class="pf-v5-c-page">
+          {% include 'navbar.html' %}
+          <main class="pf-v5-c-page__main" tabindex="-1">
             {% block content %}
             {% endblock %}
-          </div>
+            <!--
+            <section class="pf-v5-c-page__main-section pf-m-fill">
+              This section uses
+              <code>.pf-m-fill</code> to fill the available space.
+            </section>
+            <section class="pf-v5-c-page__main-section pf-m-light pf-m-no-fill">
+              This section uses
+              <code>.pf-m-no-fill</code> to not fill the available space.
+            </section>
+            -->
+          </main>
         </div>
+
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"></script>
         <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
         <script defer src="{% static 'js/app.js' %}"></script>
