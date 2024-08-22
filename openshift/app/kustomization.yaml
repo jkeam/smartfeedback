@@ -5,7 +5,7 @@ namespace: feedback
 images:
 - name: IMAGE
   newName: quay.io/jkeam/smartfeedback
-  digest: sha256:84dbd75093600ab8fd2612f3f6755b94124edd26b4da7f9f09855bf9c9b60283
+  digest: sha256:6a474e570717be43597c20c0fdaf023fce7d67f35ba26f7564795bb01bd5a9a2
 
 secretGenerator:
 - name: app-secrets
