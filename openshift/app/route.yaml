@@ -1,0 +1,16 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: feedback
+  labels:
+    app: feedback
+spec:
+  path: /
+  to:
+    kind: Service
+    name: feedback
+    weight: 100
+  port:
+    targetPort: port8000
+  tls:
+    termination: edge

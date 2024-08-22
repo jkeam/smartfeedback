@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feedback
+  labels:
+    app: feedback
+spec:
+  ports:
+    - name: port8000
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: feedback
+  type: LoadBalancer

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: feedback  
+
+images:
+- name: IMAGE
+  newName: quay.io/jkeam/smartfeedback
+  digest: sha256:84dbd75093600ab8fd2612f3f6755b94124edd26b4da7f9f09855bf9c9b60283
+
+secretGenerator:
+- name: app-secrets
+  envs:
+  - .env
+
+resources:
+- deployment.yaml
+- service.yaml
+- route.yaml

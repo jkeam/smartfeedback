@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedback
+  labels:
+    app: feedback
+spec:
+  selector:
+    matchLabels:
+      app: feedback
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: feedback
+    spec:
+      containers:
+        - name: feedback
+          image: IMAGE
+          envFrom:
+          - secretRef:
+              name: app-secrets
+          ports:
+          - containerPort: 8000
+            name: theport
+          command: ["/bin/sh"]
+          args: ["-c", "python ./manage.py migrate && python ./manage.py runserver 0.0.0.0:8000"]
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+              httpHeaders:
+              - name: Accept
+                value: application/json
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+              httpHeaders:
+              - name: Accept
+                value: application/json
+            initialDelaySeconds: 2
+            periodSeconds: 2
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+              httpHeaders:
+              - name: Accept
+                value: application/json
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 10
+      restartPolicy: Always
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedback-celery
+  labels:
+    app: feedback-celery
+spec:
+  selector:
+    matchLabels:
+      app: feedback-celery
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: feedback-celery
+    spec:
+      containers:
+        - name: feedback
+          image: IMAGE
+          envFrom:
+          - secretRef:
+              name: app-secrets
+          command: ["/bin/sh"]
+          args: ["-c", "celery -A smartfeedback worker -l INFO"]
+      restartPolicy: Always

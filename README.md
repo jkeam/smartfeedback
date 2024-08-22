@@ -4,6 +4,35 @@ Smart Feedback App
 
 ## OpenShift
 
+### Kustomize
+
+1. Copy `.env.template` to `./openshift/app/.env`
+2. Fill in `.env` with real values
+3. Deploy
+    ```shell
+    # create proj
+    oc new-project feedback
+
+    # create db
+    oc new-app --name=feedback-db \
+    --image=registry.redhat.io/rhel9/postgresql-15:1-74 \
+    --env POSTGRESQL_ADMIN_PASSWORD=adminpassword\
+    --env POSTGRESQL_PASSWORD=feedbackpassword \
+    --env POSTGRESQL_USER=feedbackuser \
+    --env POSTGRESQL_DATABASE=feedback \
+    --labels 'app=feedback-db' \
+    --namespace feedback
+
+    # create redis
+    oc new-app --name=feedback-redis \
+    --image=registry.redhat.io/rhel9/redis-7:1-27 \
+    --labels 'app=feedback-redis' \
+    --namespace feedback
+
+    # deploy app
+    oc apply -k ./openshift/app
+    ```
+
 ### Pipeline
 
 #### Setup
