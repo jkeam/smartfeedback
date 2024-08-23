@@ -1,5 +1,9 @@
 from boto3 import client
 from os import getenv, fsencode, listdir, path
+from subprocess import call
+
+call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", "/tmp"])
+
 s3 = client("s3",
             endpoint_url=getenv("AWS_S3_ENDPOINT"),
             aws_access_key_id=getenv("AWS_ACCESS_KEY_ID"),

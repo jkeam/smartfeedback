@@ -5,10 +5,6 @@ USER root
 RUN dnf install -y git-lfs
 RUN pip install boto3
 
-# model
-RUN git clone https://huggingface.co/instructlab/granite-7b-lab /tmp
-RUN chmod 1001:0 /tmp/granite-7b-lab
-
 # transfer
 USER 1001
 COPY ./transfer.py .
