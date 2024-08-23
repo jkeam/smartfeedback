@@ -9,46 +9,35 @@ spec:
       serviceAccount: feedback-ai-sa
       serviceAccountName: feedback-ai-sa
       initContainers:
-      # - name: wait-for-imagestream
-      #   image: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
-      #   imagePullPolicy: IfNotPresent
-      #   command: ["/bin/bash"]
-      #   args:
-      #   - -ec
-      #   - |-
-      #     echo -n 'Waiting for RHODS to deploy ImageStreams'
-      #     while ! oc get istag -n redhat-ods-applications 2>/dev/null | grep -qF s2i-generic-data-science-notebook:1.2; do
-      #       echo -n .
-      #       sleep 5
-      #     done; echo
       containers:
       - name: add-model
-        image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-generic-data-science-notebook:1.2
+        image: registry.access.redhat.com/ubi9/python-312:1-20.1724040035
         imagePullPolicy: IfNotPresent
         command: ["/bin/bash"]
         args:
         - -ec
         - |-
-          # in case we need to add more models, we can do it here too.
-          echo -n "not doing anything right now"
-          # TODO: use container with hugging face cli installed and download the working models
-          #   from https://huggingface.co/instructlab/granite-7b-lab
-          #
-          #
-          # curl -LO https://ai-on-openshift.io/odh-rhods/img-triton/card.fraud.detection.onnx
-          # cat << 'EOF' | python3
-          # filename = "card.fraud.detection.onnx"
-          # import boto3, os
-          # s3 = boto3.client("s3",
-          #                   endpoint_url=os.getenv("AWS_S3_ENDPOINT"),
-          #                   aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-          #                   aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"))
-          # bucket = os.getenv("AWS_S3_BUCKET")
-          # if bucket not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
-          #   s3.create_bucket(Bucket=bucket)
-          # with open(filename, "rb") as f:
-          #   s3.upload_fileobj(f, bucket, f'fraud/{filename}')
-          # EOF
+          yum install --disablerepo=rhel* git-lfs -y
+          git clone https://huggingface.co/instructlab/granite-7b-lab /tmp
+          pip install boto3
+          cat << 'EOF' | python3
+          import boto3, os
+          s3 = boto3.client("s3",
+                            endpoint_url=os.getenv("AWS_S3_ENDPOINT"),
+                            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+                            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"))
+          bucket = os.getenv("AWS_S3_BUCKET")
+          if bucket not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
+            s3.create_bucket(Bucket=bucket)
+          directory = os.fsencode('/tmp/granite-7b-lab')
+          for file in os.listdir(directory):
+              filename = os.fsdecode(file)
+              if filename.endswith(".json") or filename.endswith(".safetensors") or filename.endswith(".model") or filename.endswith(".pdf"):
+                  with open(os.path.join(directory, filename), "rb") as f:
+                    s3.upload_fileobj(f, bucket, f'granite/{filename}')
+              else:
+                  continue
+          EOF
         envFrom:
         - secretRef:
             name: aws-connection-minio
