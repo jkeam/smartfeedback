@@ -3,7 +3,7 @@ from os import getenv, listdir, path
 from os import listdir, path
 from subprocess import call
 
-call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", "/tmp"])
+call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", "/tmp/granite-7b-lab"])
 
 s3 = client("s3",
             endpoint_url=getenv("AWS_S3_ENDPOINT"),
