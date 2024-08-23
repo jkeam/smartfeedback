@@ -2,7 +2,7 @@ from boto3 import client
 from os import getenv, listdir, path
 from subprocess import call
 
-directory = "/tmp/models/granite-7b-lab"
+directory = "/opt/app-root/granite-7b-lab"
 
 # download model
 call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", directory])
