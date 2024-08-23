@@ -11,7 +11,7 @@ spec:
       initContainers:
       containers:
       - name: add-model
-        image: quay.io/jkeam/granite-7b@sha256:
+        image: quay.io/jkeam/granite-7b:latest
         imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:
