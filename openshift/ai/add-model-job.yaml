@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: add-model-job-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -16,4 +29,11 @@ spec:
         envFrom:
         - secretRef:
             name: aws-connection-minio
+        volumeMounts:
+            - name: temp
+              mountPath: /tmp/models
       restartPolicy: Never
+      volumes:
+        - name: temp
+          persistentVolumeClaim:
+            claimName: add-model-job-pvc
