@@ -11,33 +11,8 @@ spec:
       initContainers:
       containers:
       - name: add-model
-        image: registry.access.redhat.com/ubi9/python-312:1-20.1724040035
+        image: quay.io/jkeam/granite-7b@sha256:
         imagePullPolicy: IfNotPresent
-        command: ["/bin/bash"]
-        args:
-        - -ec
-        - |-
-          yum install --disablerepo=rhel* git-lfs -y
-          git clone https://huggingface.co/instructlab/granite-7b-lab /tmp
-          pip install boto3
-          cat << 'EOF' | python3
-          import boto3, os
-          s3 = boto3.client("s3",
-                            endpoint_url=os.getenv("AWS_S3_ENDPOINT"),
-                            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-                            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"))
-          bucket = os.getenv("AWS_S3_BUCKET")
-          if bucket not in [bu["Name"] for bu in s3.list_buckets()["Buckets"]]:
-            s3.create_bucket(Bucket=bucket)
-          directory = os.fsencode('/tmp/granite-7b-lab')
-          for file in os.listdir(directory):
-              filename = os.fsdecode(file)
-              if filename.endswith(".json") or filename.endswith(".safetensors") or filename.endswith(".model") or filename.endswith(".pdf"):
-                  with open(os.path.join(directory, filename), "rb") as f:
-                    s3.upload_fileobj(f, bucket, f'granite/{filename}')
-              else:
-                  continue
-          EOF
         envFrom:
         - secretRef:
             name: aws-connection-minio

@@ -1,0 +1,10 @@
+FROM registry.access.redhat.com/ubi9/python-312:1-20.1724040035 AS build
+USER root
+RUN dnf install -y git-lfs
+RUN git clone https://huggingface.co/instructlab/granite-7b-lab /tmp
+
+FROM registry.access.redhat.com/ubi9/python-312:1-20.1724040035
+RUN pip install boto3
+COPY --from=build /tmp/granite-7b-lab /tmp
+COPY ./transfer.py .
+CMD ["python", "./transfer.py"]
