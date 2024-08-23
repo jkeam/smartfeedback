@@ -5,7 +5,7 @@ USER root
 RUN dnf install -y git-lfs
 
 # model dir
-RUN mkdir /tmp/models && chown 1001:0 /tmp/models
+RUN mkdir -p /tmp/models/granite-7b-lab && chown 1001:0 /tmp/models/granite-7b-lab
 
 # transfer
 USER 1001
