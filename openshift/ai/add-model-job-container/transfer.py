@@ -1,10 +1,8 @@
 from boto3 import client
-from os import getenv, listdir, path, makedirs
+from os import getenv, listdir, path
 from subprocess import call
 
-# setup
 directory = "/tmp/models/granite-7b-lab"
-makedirs(directory)
 
 # download model
 call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", directory])

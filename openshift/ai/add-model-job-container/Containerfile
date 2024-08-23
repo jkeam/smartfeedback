@@ -4,6 +4,9 @@ USER root
 # libs
 RUN dnf install -y git-lfs
 
+# model dir
+RUN mkdir /tmp/models && chown 1001:0 /tmp/models
+
 # transfer
 USER 1001
 RUN pip install boto3
