@@ -4,7 +4,7 @@ from subprocess import call
 
 # dir
 directory = "/opt/app-root/models/granite-7b-lab"
-makedirs(path)
+makedirs(directory)
 
 # download model
 call(["git", "clone", "https://huggingface.co/instructlab/granite-7b-lab", directory])
