@@ -8,5 +8,5 @@ RUN dnf install -y git-lfs
 USER 1001
 RUN pip install boto3
 COPY ./transfer.py .
-RUN mkdir /opt/app-root/granite-7b-lab
+RUN mkdir -p /opt/app-root/models/granite-7b-lab
 CMD ["python", "./transfer.py"]

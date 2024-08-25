@@ -7,7 +7,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 50Gi
 
 ---
 
@@ -30,10 +30,19 @@ spec:
         - secretRef:
             name: aws-connection-minio
         volumeMounts:
-            - name: temp
-              mountPath: /tmp/models
+        - name: models
+          mountPath: /opt/app-root/models
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "500m"
+            ephemeral-storage: "16Gi"
+          limits:
+            memory: "24Gi"
+            cpu: "2000m"
+            ephemeral-storage: "24Gi"
       restartPolicy: Never
       volumes:
-        - name: temp
+        - name: models
           persistentVolumeClaim:
             claimName: add-model-job-pvc
