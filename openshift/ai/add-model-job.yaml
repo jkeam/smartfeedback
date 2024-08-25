@@ -41,6 +41,8 @@ spec:
             memory: "24Gi"
             cpu: "2000m"
             ephemeral-storage: "24Gi"
+      securityContext:
+        fsGroup: 0
       restartPolicy: Never
       volumes:
         - name: models

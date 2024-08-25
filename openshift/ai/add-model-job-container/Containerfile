@@ -3,7 +3,6 @@ USER root
 
 # libs
 RUN dnf install -y git-lfs
-RUN mkdir -p /opt/app-root/models/granite-7b-lab && chown -R 1001:0 /opt/app-root/models
 
 # transfer
 USER 1001
