@@ -26,5 +26,5 @@ patches:
 resources:
 - serviceaccount.yaml
 - add-model-job.yaml
-# - serving-runtime.yaml
-# - inference-service.yaml
+- serving-runtime.yaml
+- inference-service.yaml

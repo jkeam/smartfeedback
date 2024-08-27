@@ -10,6 +10,11 @@ Smart Feedback App
 
 1. Copy `.env.ai.template` to `./openshift/ai/.env`
 2. Fill in `./openshift/ai/.env` with real values
+3. Deploy
+
+    ```shell
+    oc apply -k ./openshift/ai
+    ```
 
 #### App
 
