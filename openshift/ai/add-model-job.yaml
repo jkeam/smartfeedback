@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: add-model-job-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: add-model-job
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      serviceAccount: feedback-ai-sa
+      serviceAccountName: feedback-ai-sa
+      initContainers:
+      containers:
+      - name: add-model
+        image: "quay.io/jkeam/granite-7b@sha256:f5ab8b0fbd9499c025527444572d1cb39137f9ad64c89c56dcf122a1c0d96297"
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - secretRef:
+            name: aws-connection-minio
+        volumeMounts:
+        - name: models
+          mountPath: /opt/app-root/models
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "500m"
+            ephemeral-storage: "16Gi"
+          limits:
+            memory: "24Gi"
+            cpu: "2000m"
+            ephemeral-storage: "24Gi"
+      securityContext:
+        fsGroup: 0
+      restartPolicy: Never
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: add-model-job-pvc
