@@ -7,7 +7,6 @@ metadata:
     sidecar.istio.io/inject: "true"
     sidecar.istio.io/rewriteAppHTTPProbers: "true"
   labels:
-    networking.knative.dev/visibility: cluster-local
     opendatahub.io/dashboard: "true"
   name: granite
 spec:
