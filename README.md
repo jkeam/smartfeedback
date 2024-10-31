@@ -116,7 +116,7 @@ oc create -f ./openshift/pipeline/pipelinerun.yaml --namespace feedback
 2. Create superuser
 
     ```shell
-    DJANGO_SUPERUSER_PASSWORD=password1 python ./manage.py createsuperuser --username admin --email admin@example.com --noinput
+    DJANGO_SUPERUSER_PASSWORD=openshift python ./manage.py createsuperuser --username admin --email admin@example.com --noinput
     ```
 
 ## Docs

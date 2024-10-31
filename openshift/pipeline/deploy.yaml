@@ -40,11 +40,11 @@ spec:
           - name: ALLOWED_HOSTS
             value: "*"
           - name: CSRF_TRUSTED_ORIGINS
-            value: "feedback-feedback.apps.lab.lan,feedback-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
+            value: "feedback-feedback.apps.cluster-tztj8.tztj8.sandbox1467.opentlc.com"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
           - name: MODEL_API_URL
-            value: "https://granite-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
+            value: "https://granite-feedback.apps.cluster-tztj8.tztj8.sandbox1467.opentlc.com"
           - name: MODEL_FAMILY
             value: "granite"
           - name: MODEL_NAME
@@ -130,11 +130,11 @@ spec:
           - name: ALLOWED_HOSTS
             value: "*"
           - name: CSRF_TRUSTED_ORIGINS
-            value: "feedback-feedback.apps.lab.lan"
+            value: "feedback-feedback.apps.cluster-tztj8.tztj8.sandbox1467.opentlc.com"
           - name: REDIS_URL
             value: "redis://feedback-redis.feedback.svc.cluster.local:6379"
           - name: MODEL_API_URL
-            value: "https://granite-feedback.apps.cluster-g6wbk.sandbox2143.opentlc.com"
+            value: "https://granite-feedback.apps.cluster-tztj8.tztj8.sandbox1467.opentlc.com"
           - name: MODEL_FAMILY
             value: "granite"
           - name: MODEL_NAME
